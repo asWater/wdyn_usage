@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> TEST </title>
+    <!-- Test after PC replacement -->
+
+		<!-- Angular -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.0.1/ui-bootstrap-tpls.min.js"></script>
+	    <!--
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.11.1/angular-translate.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.11.1/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"> </script>
+	    -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.15.2/angular-translate.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.15.2/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"> </script>
+
+	    <!-- Jquery Relevant -->
+	    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+
+		<!-- Pivot Relevant Libraries -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.11.0/pivot.min.js"> </script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.11.0/export_renderers.min.js"> </script>
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.1.0/d3_renderers.min.js"> </script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.11.0/c3_renderers.min.js"> </script>
+
+		<!-- Moment & Chart relevant -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/angular.chartjs/1.0.0/angular-chart.min.js"></script>
+		
+		<!--  Bootstrap  -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<!-- SAP UI5 -->
+		<!-- <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"></script> -->
+		<!-- <script src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"></script> -->
+	
+		<!-- My scripts -->
+		<script src="js/myUtil.js"></script>
+		<script src="js/main.js"></script>
+
+	    <!-- ### CSS ### -->
+	    <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.11.0/pivot.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+		<!-- MY CSS -->
+    	<link rel="stylesheet" type="text/css" href="css/myStyle.css" charset="utf-8">
+  
+  </head>
+  <body>
+  	<div ng-app="usageAnaApp">
+
+  		<!-- Main Container --> 
+		<div class="container" ng-controller="MainCtrl">
+
+			<!-- HEADER -->
+			<div id="headerFixed" class="headerStyle">
+			    <div class="headerContents"> <button ng-class="{btnPushed: isBtnSummary}" class="btn" ng-click="readSummary()" translate="headerArea.summaryBtn"></button></div>
+			    <div class="headerContents"> <button ng-class="{btnPushed: isBtnDetail}" class="btn" ng-click="readDetail()" translate="headerArea.detailBtn"></button></div>
+
+				<!-- Language Selection -->
+			    <div class="langSelect btn-group" uib-dropdown ng-show="(!alerts)">
+			        <button class="btn btn-primary" type="button" uib-dropdown-toggle>{{currentLang}} <span class="caret"></span> </button>
+			        <ul class="dropdown-menu langDropDown" uib-dropdown-menu role="menu" aria-labelledby="dropDownLang">
+				        <li class="langList" ng-repeat="(key, value) in languages">
+				          <a ng-click="selectLang(key)">{{value}}</a>
+				        </li>
+			        </ul>
+			    </div>
+			</div>  
+
+			<!-- SUMMARY PAGE -->
+		    <div ng-show="showSummary" class="firstSection">
+
+		    	<h3 class="textColorMain" translate="summaryTab.headerWdynWdya"></h3>	
+		    	<div class="boxContainer">
+		    		<div>
+			    		<table class="table table-bordered tableRound">
+				  			<tr class="tableHeader">
+				  				<td translate="summaryTab.category"></td>
+				  				<td translate="summaryTab.objType"></td>
+				  				<td translate="summaryTab.objCnt"></td>
+				  				<td translate="summaryTab.percentType"></td>
+				  				<td translate="summaryTab.percent"></td>
+				  			</tr>
+				  			<tr>
+				  				<td rowspan=2 class="tabRowHeader usedArea cellCenter" translate="summaryTab.usedRow"></td>
+				  				<td class="usedArea" translate="summaryTab.wdyn"></td>
+				  				<td class="cellCenter usedArea"> {{usedObjCntWdyn}} </td>
+				  				<td class="cellCenter usedArea"> {{usedObjCntWdyn / (usedObjCntWdyn + unUsedObjCntWdyn) * 100 | number:2}} %</td>
+				  				<td rowspan=2 class="cellCenter usedArea"> {{usedObjCnt / (usedObjCnt + unUsedObjCnt) * 100 | number:2}} %</td>
+				  			</tr>
+				  			<tr>
+				  				<td class="usedArea" translate="summaryTab.wdya"></td>
+				  				<td class="cellCenter usedArea"> {{usedObjCntWdya}} </td>
+				  				<td class="cellCenter usedArea"> {{usedObjCntWdya / (usedObjCntWdya + unUsedObjCntWdya) * 100 | number:2}} %</td>
+				  			</tr>
+				  			<tr>
+				  				<td rowspan=2 class="tabRowHeader unUsedArea cellCenter" translate="summaryTab.notUsedRow"></td>
+				  				<td class="unUsedArea" translate="summaryTab.wdyn"></td>
+				  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdyn}} </td>
+				  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdyn / (usedObjCntWdyn + unUsedObjCntWdyn) * 100 | number:2}} %</td>
+				  				<td rowspan=2 class="cellCenter unUsedArea"> {{unUsedObjCnt / (usedObjCnt + unUsedObjCnt) * 100 | number:2}} %</td>
+				  			</tr>
+				  			<tr>
+				  				<td class="unUsedArea" translate="summaryTab.wdya"></td>
+				  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdya}} </td>
+				  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdya / (usedObjCntWdya + unUsedObjCntWdya) * 100 | number:2}} %</td>
+				  			</tr>
+				  		</table>
+			  		</div>
+				  	<div>
+				  		<canvas id="pie" class="chart chart-pie pieSummary" chart-data="usageData" chart-labels="usageLabels" chart-colors="usageColors" chart-options="options"></canvas>
+			  		</div>
+		  		</div>
+
+				<!-- Accordion Group: START -->
+				<uib-accordion close-others="oneAtATime">
+					<div uib-accordion-group class="panel-default" is-open="status.open">
+						<uib-accordion-heading>
+							{{ 'accordion.sepaGraTitle' | translate }} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"> </i>
+						</uib-accordion-heading>
+
+				    	<h3 class="textColorMain" translate="summaryTab.headerWdynWdya"></h3>	
+				    	<div class="boxContainer">
+				    		<div>
+					    		<table class="table table-bordered tableRound">
+						  			<tr class="tableHeader">
+						  				<td translate="summaryTab.category"></td>
+						  				<td translate="summaryTab.objCnt"></td>
+						  				<td translate="summaryTab.percent"></td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader usedArea" translate="summaryTab.usedRow"></td>
+						  				<td class="cellCenter usedArea"> {{usedObjCnt}} </td>
+						  				<td class="cellCenter usedArea"> {{usedObjCnt / (usedObjCnt + unUsedObjCnt) * 100 | number:2}} %</td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader unUsedArea" translate="summaryTab.notUsedRow"></td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCnt}} </td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCnt / (usedObjCnt + unUsedObjCnt) * 100 | number:2}} %</td>
+						  			</tr>
+						  		</table>
+					  		</div>
+						  	<div>
+						  		<canvas id="pie" class="chart chart-pie pieSummary" chart-data="usageData" chart-labels="usageLabels" chart-colors="usageColors" chart-options="options"></canvas>
+					  		</div>
+				  		</div>
+
+						<h3 class="textColorMain" translate="summaryTab.headerWdyn"></h3>
+				    	<div class="boxContainer">
+				    		<div>
+					    		<table class="table table-bordered tableRound">
+						  			<tr class="tableHeader">
+						  				<td translate="summaryTab.category"></td>
+						  				<td translate="summaryTab.objCnt"></td>
+						  				<td translate="summaryTab.percent"></td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader usedArea" translate="summaryTab.usedRow"></td>
+						  				<td class="cellCenter usedArea"> {{usedObjCntWdyn}} </td>
+						  				<td class="cellCenter usedArea"> {{usedObjCntWdyn / (usedObjCntWdyn + unUsedObjCntWdyn) * 100 | number:2}} %</td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader unUsedArea" translate="summaryTab.notUsedRow"></td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdyn}} </td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdyn / (usedObjCntWdyn + unUsedObjCntWdyn) * 100 | number:2}} %</td>
+						  			</tr>
+						  		</table>
+					  		</div>
+					  		<div>
+				  				<canvas id="pie" class="chart chart-pie pieSummary" chart-data="usageDataWdyn" chart-labels="usageLabels" chart-colors="usageColors" chart-options="options" height="{{chartHeight}}" width="{{chartWidth}}"></canvas>
+				  			</div>
+				  		</div>
+
+				    	<h3 class="textColorMain" translate="summaryTab.headerWdya"></h3>
+				    	<div class="boxContainer">
+				    		<div>
+					    		<table class="table table-bordered tableRound">
+						  			<tr class="tableHeader">
+						  				<td translate="summaryTab.category"></td>
+						  				<td translate="summaryTab.objCnt"></td>
+						  				<td translate="summaryTab.percent"></td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader usedArea" translate="summaryTab.usedRow"></td>
+						  				<td class="cellCenter usedArea"> {{usedObjCntWdya}} </td>
+						  				<td class="cellCenter usedArea"> {{usedObjCntWdya / (usedObjCntWdya + unUsedObjCntWdya) * 100 | number:2}} %</td>
+						  			</tr>
+						  			<tr>
+						  				<td class="tabRowHeader unUsedArea" translate="summaryTab.notUsedRow"></td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdya}} </td>
+						  				<td class="cellCenter unUsedArea"> {{unUsedObjCntWdya / (usedObjCntWdya + unUsedObjCntWdya) * 100 | number:2}} %</td>
+						  			</tr>
+						  		</table>
+					  		</div>
+					  		<div>
+				  				<canvas id="pie" class="chart chart-pie pieSummary" chart-data="usageDataWdya" chart-labels="usageLabels" chart-colors="usageColors" chart-options="options" height="{{chartHeight}}" width="{{chartWidth}}"></canvas>
+				  			</div>
+				  		</div>
+
+			  		</div>
+		  		</uib-accordion>
+		  		<!-- Accordion Group: END -->
+				
+				<!-- Used Object Table: All Objects -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.usedObjTitle"></h3>
+				<div class="pivotTable">
+					<div id="sumUsedObjTab" class="pTab noCntroller usedSumTab"></div>
+				</div>
+				<!-- Used Object Table: Used objects with respect to each Package -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.usedObjTitlePkg"></h3>
+				<div class="pivotTable multiPivots">
+					<div id="sumUsedObj_pkg" class="pTab noCntroller usedSumTab"></div>
+					<div id="sumUsedObj_pkgChart" class="pTab noCntroller usedSumTab"></div>
+				</div>
+				<!-- Used Object Table: Used objects with respect to each Author -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.usedObjTitleAuthor"></h3>
+				<div class="pivotTable multiPivots">
+					<div id="sumUsedObj_author" class="pTab noCntroller usedSumTab"></div>
+					<div id="sumUsedObj_authorChart" class="pTab noCntroller usedSumTab"></div>
+				</div>
+
+				<!-- Not used Object Table: All Objects -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.notUsedObjTitle"></h3>
+				<div class="pivotTable">
+					<div id="sumNotUsedObjTab" class="pTab noCntroller notUsedSumTab"></div>
+				</div>
+				<!-- Not used Object Table: Not used objects with respect to each Package -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.notUsedObjTitlePkg"></h3>
+				<div class="pivotTable multiPivots">
+					<div id="sumNotUsedObj_pkg" class="pTab noCntroller notUsedSumTab"></div>
+					<div id="sumNotUsedObj_pkgChart" class="pTab noCntroller notUsedSumTab"></div>
+				</div>
+				<!-- Not used Object Table: Not used objects with respect to each Author -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.notUsedObjTitleAuthor"></h3>
+				<div class="pivotTable multiPivots">
+					<div id="sumNotUsedObj_author" class="pTab noCntroller notUsedSumTab"></div>
+					<div id="sumNotUsedObj_authorChart" class="pTab noCntroller notUsedSumTab"></div>
+				</div>
+
+				<!-- Free selection for Summary data -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.freeSelectTitle"></h3>
+				<div class="pivotTable">
+					<div id="sumFreeSelectTab" class="pTab"></div>
+				</div>
+
+
+				<!-- Table of objects and usage -->
+		  		<h3 class="largeSpace textColorMain" translate="summaryTab.headerTable"></h3>
+			  	
+			  	<!-- Filter area -->
+			  	<form>
+			    	<div class="form-group">
+			      		<div class="input-group">
+			        		<div class="input-group-addon"><i class="fa fa-search"></i></div>
+			        		<input type="text" class="form-control" placeholder="{{'filterArea.placeHolder' | translate }}" ng-model="summarySearchObj">
+			      		</div>      
+			    	</div>
+			  	</form>
+
+			    <!-- Table Area -->
+			    <table name="summaryTable" class="table table-bordered tableRound fontSize10px">
+			    	<tr class="tableHeader">
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'USED_FLAG'; summarySortReverse = !summarySortReverse"> 
+			    				{{'usageColumn.usedFlag' | translate }} 
+			    				<span ng-show="summarySortType == 'USED_FLAG' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'USED_FLAG' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td>
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'PGMID'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.programID' | translate }} 
+			    				<span ng-show="summarySortType == 'PGMID' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'PGMID' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'OBJECT'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.objectType' | translate }}
+			    				<span ng-show="summarySortType == 'OBJECT' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'OBJECT' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'OBJ_NAME'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.objectName' | translate }}
+			    				<span ng-show="summarySortType == 'OBJ_NAME' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'OBJ_NAME' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  			    				
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'SRCSYSTEM'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.srcSystem' | translate }}
+			    				<span ng-show="summarySortType == 'SRCSYSTEM' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'SRCSYSTEM' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  	
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'AUTHOR'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.author' | translate }}
+			    				<span ng-show="summarySortType == 'AUTHOR' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'AUTHOR' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'DEVCLASS'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.devClass' | translate }}
+			    				<span ng-show="summarySortType == 'DEVCLASS' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'DEVCLASS' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'MASTERLANG'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.masterLang' | translate }}
+			    				<span ng-show="summarySortType == 'MASTERLANG' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'MASTERLANG' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'DELFLAG'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.delFlag' | translate }}
+			    				<span ng-show="summarySortType == 'DELFLAG' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'DELFLAG' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    		<td> 
+			    			<a href="#summaryTable" ng-click="summarySortType = 'CREATED_ON'; summarySortReverse = !summarySortReverse"> 
+			    				{{'objColumn.createdDate' | translate }}
+			    				<span ng-show="summarySortType == 'CREATED_ON' && !summarySortReverse" class="fa fa-caret-down caretColorRed"></span>
+			    				<span ng-show="summarySortType == 'CREATED_ON' && summarySortReverse" class="fa fa-caret-up caretColorRed"></span>  
+			    			</a> 
+			    		</td> 
+			    	</tr>
+			        <tr ng-repeat="result in summaryResults | orderBy:summarySortType:summarySortReverse | filter:summarySearchObj" ng-class="{'success': result.USED_FLAG == 'X'}">
+						<td> {{result.USED_FLAG}} </td>
+						<td> {{result.PGMID}} </td> 
+						<td> {{result.OBJECT}} </td>
+						<td> {{result.OBJ_NAME}} </td>
+						<td> {{result.SRCSYSTEM}} </td>
+						<td> {{result.AUTHOR}} </td>
+						<td> {{result.DEVCLASS}} </td>
+						<td> {{result.MASTERLANG}} </td>
+						<td> {{result.DELFLAG}} </td>
+						<td> {{result.CREATED_ON}} </td>
+			        </tr>
+			    </table>
+		    </div>
+
+			<!-- DETAIL PAGE -->
+		    <div  ng-show="showDetail" class="firstSection">
+		    	<!-- Execution Counts -->
+				<h3 class="textColorMain" translate="detailTab.titleExecObj"></h3>
+				<div class="pivotTable multiPivots">
+			    	<div id="usageExecCnt" class="pTab noCntroller"></div>
+			    	<div id="usageExecCnt_chart" class="pTab noCntroller"></div>
+			    </div>
+
+			    <!-- Execution by User -->
+				<h3 class="textColorMain" translate="detailTab.titleExecUser"></h3>
+				<div class="pivotTable multiPivots">
+			    	<div id="usageExecUser" class="pTab noCntroller"></div>
+			    	<div id="usageExecUser_chart" class="pTab noCntroller"></div>
+			    </div>
+
+				<!-- Free selection for Summary data -->
+				<h3 class="largeSpace textColorMain" translate="summaryTab.freeSelectTitle"></h3>
+				<div class="pivotTable">
+					<div id="detailFreeSelectTab" class="pTab"></div>
+				</div>
+
+			    <pre class="forSpace largeSpace"></pre>
+				
+				<!-- Table contents should be deleted in the future -->
+			    <h3 class="textColorMain" translate="detailTab.usedObjTable"></h3>
+			  	
+			  	<!-- Filter area -->
+			  	<form>
+			    	<div class="form-group">
+			      		<div class="input-group">
+			        		<div class="input-group-addon"><i class="fa fa-search"></i></div>
+			        		<input type="text" class="form-control" placeholder="{{'filterArea.placeHolder' | translate }}" ng-model="summarySearchObj">
+			      		</div>      
+			    	</div>
+			  	</form>
+
+			    <table class="table table-bordered tableRound fontSize10px">
+			    	<tr class="tableHeader">
+			    		<td translate="usageColumn.usageDate"></td>
+			    		<td translate="wdynSpec.wdyn_app"></td>
+			    		<td translate="wdynSpec.wdyn_comp"></td>
+			    		<td translate="usageColumn.runBy"></td>
+			    		<td translate="usageColumn.client"></td>
+			    		<td translate="usageColumn.host"></td>
+			    		<td translate="usageColumn.port"></td>
+			    		<td translate="usageColumn.path"></td>
+			    		<td translate="usageColumn.exeCnt"></td>
+			    	</tr>
+			        <tr ng-repeat="result in detailResults | filter:summarySearchObj">
+						<td> {{result.USAGE_DATE}} </td>
+						<td> {{result.WDYA_NAME}} </td> 
+						<td> {{result.WDYN_NAME}} </td>
+						<td> {{result.RUNBY}} </td>
+						<td> {{result.MANDT}} </td>
+						<td> {{result.HOST}} </td>
+						<td> {{result.PORT}} </td>
+						<td> {{result.PATH}} </td>
+						<td> {{result.COUNTER}} </td>
+			        </tr>
+			    </table>
+			</div> <!-- End of Detail Page -->
+
+		</div> <!-- End of Main Container --> 
+
+	</div>
+  
+  </body>
+</html>

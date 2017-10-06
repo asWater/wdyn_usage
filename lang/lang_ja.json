@@ -1,0 +1,72 @@
+﻿{
+	"headerArea":
+	{
+		"summaryBtn": "使用/未使用オブジェクトのサマリー",
+		"detailBtn": "使用オブジェクトの詳細"
+	},
+	"summaryTab":
+	{
+		"headerWdynWdya": "WDYN & WDYA: 使用分析",
+		"headerWdyn": "WDYN: 使用分析",
+		"headerWdya": "WDYA: U使用分析",
+		"headerTable": "全ての WDYN & WDYA オブジェクトとその使用状況",
+		"category": "カテゴリ",
+		"objType": "オブジェクトタイプ",
+		"objCnt": "オブジェクト数",
+		"percentType": "オブジェクトタイプごとの割合",
+		"percent": "割合",
+		"wdyn": "WDYN",
+		"wdya": "WDYA",
+		"usedRow": "使用されているオブジェクト",
+		"notUsedRow": "使用されていないオブジェクト",
+		"usedObjTitle": "使用されているオブジェクトの情報",
+		"usedObjTitlePkg": "パッケージごとの使用されているオブジェクト",
+		"usedObjTitleAuthor": "作成者ごとの使用されているオブジェクト",
+		"notUsedObjTitle": "使用されていないオブジェクトの情報",
+		"notUsedObjTitlePkg": "パッケージごとの使用されていないオブジェクト",
+		"notUsedObjTitleAuthor": "作成者ごとの使用されていないオブジェクト",
+		"freeSelectTitle": "カスタマイズテーブル"
+	},
+	"objColumn":
+	{
+		"programID": "プログラムID",
+		"objectType": "オブジェクトタイプ",
+		"objectName": "オブジェクト名",
+		"srcSystem": "ソースシステム",
+		"author": "作成者",
+		"devClass": "パッケージ",
+		"masterLang": "マスター言語",
+		"delFlag": "削除フラグ",
+		"createdDate": "作成日"
+	},
+	"usageColumn":
+	{
+		"usedFlag": "使用フラグ",
+		"usageDate": "使用された日",
+		"runBy": "実行者",
+		"client": "クライアント",
+		"host": "ホスト",
+		"port": "ポート",
+		"path": "パス",
+		"exeCnt": "実行回数"
+	},
+	"detailTab":
+	{
+		"titleExecObj": "オブジェクトごとの実行回数",
+		"titleExecUser": "ユーザごとの実行回数",
+		"usedObjTable": "使用されたオブジェクトのテーブル"
+	},
+	"wdynSpec":
+	{
+		"wdyn_app": "WDYN アプリケーション",
+		"wdyn_comp": "WDYN コンポーネント"
+	},
+	"accordion":
+	{
+		"sepaGraTitle": "個別のテーブルと円グラフ"
+	},
+	"filterArea":
+	{
+		"placeHolder": "検索ワードを入力してください"
+	}
+}
