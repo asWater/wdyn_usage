@@ -142,6 +142,9 @@ moment.locale( myUtil.getBrowserLang() );
 
             //callback( scope, jsonData )
 
+            // These changing flags are possible to do in the SWITCH satement above,
+            // but if it is executed in the SWITCH statement, showing empty page in a few seconds, 
+            // that's why changing flags are exected here.
             if ( isSummary ) {
                 scope.showSummary = true; scope.showDetail = false; 
             }
